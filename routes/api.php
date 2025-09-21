@@ -48,7 +48,7 @@ Route::post('/login', function (Request $request) {
     ]);
 });
 
-Route::middleware('auth:sanctum')->group(function () {
+// Route::middleware('auth:sanctum')->group(function () {
     Route::get('/me', fn(Request $request) => $request->user());
 
     Route::post('/logout', function (Request $request) {
@@ -61,4 +61,4 @@ Route::middleware('auth:sanctum')->group(function () {
         // 'products' => \App\Http\Controllers\Api\ProductController::class,
         // 'orders'   => \App\Http\Controllers\Api\OrderController::class,
     ]);
-});
+// });
