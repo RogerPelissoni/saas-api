@@ -15,7 +15,16 @@ class ClientController extends Controller
     ]);
   }
 
-  public function store(Request $request) {}
+  public function store(Request $request)
+  {
+    Client::create([
+      'name' => $request->name,
+    ]);
+
+    return response()->json([
+      'message' => 'Operação efetuada com sucesso'
+    ]);
+  }
 
   public function show(string $id) {}
 
