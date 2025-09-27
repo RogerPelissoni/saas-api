@@ -28,7 +28,23 @@ class ClientController extends Controller
 
   public function show(string $id) {}
 
-  public function update(Request $request, string $id) {}
+  public function update(Request $request, string $id)
+  {
+    Client::find($id)->update([
+      'name' => $request->name,
+    ]);
 
-  public function destroy(string $id) {}
+    return response()->json([
+      'message' => 'Operação efetuada com sucesso'
+    ]);
+  }
+
+  public function destroy(string $id)
+  {
+    Client::find($id)->delete();
+
+    return response()->json([
+      'message' => 'Operação efetuada com sucesso'
+    ]);
+  }
 }
