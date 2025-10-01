@@ -14,6 +14,6 @@ Route::prefix('auth')->group(function () {
 
 Route::middleware('auth:sanctum')->group(function () {
   Route::apiResource('client', \App\Http\Controllers\Api\ClientController::class);
-  // Route::apiResource('products', ProductController::class);
-  // Route::apiResource('orders', OrderController::class);
+  Route::apiResource('profile', \App\Http\Controllers\Api\ProfileController::class);
+  Route::apiResource('user', \App\Http\Controllers\Api\UserController::class);
 });
