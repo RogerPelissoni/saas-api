@@ -14,8 +14,8 @@ class ResetDatabase extends Command
     $this->info('💥 Limpando o banco de dados...');
     $this->call('migrate:fresh');
 
-    // $this->info('🌱 Rodando os seeders...');
-    // $this->call('db:seed');
+    $this->info('🌱 Rodando os seeders...');
+    $this->call('db:seed');
 
     $this->info('✅ Banco de dados pronto!');
   }
