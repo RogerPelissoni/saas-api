@@ -16,6 +16,27 @@ abstract class Controller
     ]);
   }
 
+  public function keyValue()
+  {
+    $kvKey = $this->model::$kvKey ?? 'id';
+    $kvValues = $this->model::$kvValues ?? ['name'];
+
+    if (count($kvValues) > 1) {
+      $kvSeparator = ' - ';
+      $concatColumns = implode(", '{$kvSeparator}', ", $kvValues);
+
+      $kvData = $this->model::selectRaw("{$kvKey}, CONCAT($concatColumns) as value")
+        ->pluck('value', $kvKey)
+        ->toArray();
+    } else {
+      $kvData = $this->model::pluck($kvValues[0], $kvKey)->toArray();
+    }
+
+    return response()->json([
+      'data' => $kvData,
+    ]);
+  }
+
   public function show(string $id): JsonResponse
   {
     return response()->json([

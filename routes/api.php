@@ -13,6 +13,10 @@ Route::prefix('auth')->group(function () {
 });
 
 Route::middleware('auth:sanctum')->group(function () {
+  // Get
+  // Post
+  Route::post('multiple', [\App\Http\Controllers\Api\MultipleController::class, 'index']);
+  // Resources
   Route::apiResource('client', \App\Http\Controllers\Api\ClientController::class);
   Route::apiResource('profile', \App\Http\Controllers\Api\ProfileController::class);
   Route::apiResource('user', \App\Http\Controllers\Api\UserController::class);
