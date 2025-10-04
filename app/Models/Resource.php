@@ -4,11 +4,11 @@ namespace App\Models;
 
 use App\Http\Controllers\Model;
 
-class Profile extends Model
+class Resource extends Model
 {
-  protected $table = 'profile';
+  protected $table = 'resource';
   protected $fillable = [
     'name',
-    'description',
+    'resource',
   ];
 }

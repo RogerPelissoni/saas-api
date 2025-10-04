@@ -16,6 +16,7 @@ Route::middleware('auth:sanctum')->group(function () {
   // Get
   // Post
   Route::post('multiple', [\App\Http\Controllers\Api\MultipleController::class, 'index']);
+  Route::post('profile/permissions', [\App\Http\Controllers\Api\ProfileController::class, 'getPermissionsByProfile']);
   // Resources
   Route::apiResource('client', \App\Http\Controllers\Api\ClientController::class);
   Route::apiResource('profile', \App\Http\Controllers\Api\ProfileController::class);
