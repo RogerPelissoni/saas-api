@@ -2,66 +2,31 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\ProfileService;
+use App\Http\Requests\ProfileRequest;
 use Illuminate\Http\JsonResponse;
+use App\Services\ProfileService;
 use Illuminate\Http\Request;
-use App\Models\Resource;
 use App\Core\Controller;
-use App\Models\Profile;
 
 class ProfileController extends Controller
 {
-  use ProfileService;
+  public function __construct(ProfileService $service)
+  {
+    $this->service = $service;
+  }
 
-  protected string $model = Profile::class;
+  public function store(ProfileRequest $request): JsonResponse
+  {
+    return $this->service->store($request);
+  }
+
+  public function update(ProfileRequest $request, $id): JsonResponse
+  {
+    return $this->service->update($request, $id);
+  }
 
   public function getPermissionsByProfile(Request $request)
   {
-    $obProfilePermission = Resource::select([
-      'profile_permission.id AS profile_permission_id',
-      'profile_permission.permission_level',
-      'resource.id AS resource_id',
-      'resource.name AS ds_resource',
-    ])
-      ->leftJoin('profile_permission', function ($join) use ($request) {
-        $join->on('profile_permission.resource_id', '=', 'resource.id')
-          ->where('profile_permission.profile_id', $request->profile_id);
-      })
-      ->get();
-
-    return response()->json([
-      'data' => $obProfilePermission,
-    ]);
-  }
-
-  public function store(Request $request): JsonResponse
-  {
-    $modelClass = $this->model;
-    $fillableFields = (new $modelClass())->getFillable();
-
-    $obModel = $modelClass::create($request->only($fillableFields));
-
-    $this->syncPermissions($obModel->id, $request->permissions);
-
-    return response()->json([
-      'message' => 'Operação efetuada com sucesso',
-      'data' => $obModel,
-    ]);
-  }
-
-  public function update(Request $request, $id): JsonResponse
-  {
-    $modelClass = $this->model;
-    $idProfile = $id;
-
-    $obModel = $modelClass::findOrFail($idProfile);
-    $obModel->update($request->only($obModel->getFillable()));
-
-    $this->syncPermissions($idProfile, $request->permissions);
-
-    return response()->json([
-      'message' => 'Operação efetuada com sucesso',
-      'data' => $obModel,
-    ]);
+    return $this->service->getPermissionsByProfile($request);
   }
 }

@@ -7,75 +7,28 @@ use Illuminate\Http\Request;
 
 abstract class Controller
 {
-  protected string $model;
+  protected $service;
 
-  public function index(): JsonResponse
+  public function index(Request $request)
   {
-    return response()->json([
-      'data' => $this->model::all(),
-    ]);
+    return $this->service->index($request);
   }
 
-  public function keyValue()
+  public function show($id)
   {
-    $kvKey = $this->model::$kvKey ?? 'id';
-    $kvValues = $this->model::$kvValues ?? ['name'];
-
-    if (count($kvValues) > 1) {
-      $kvSeparator = ' - ';
-      $concatColumns = implode(", '{$kvSeparator}', ", $kvValues);
-
-      $kvData = $this->model::selectRaw("{$kvKey}, CONCAT($concatColumns) as value")
-        ->pluck('value', $kvKey)
-        ->toArray();
-    } else {
-      $kvData = $this->model::pluck($kvValues[0], $kvKey)->toArray();
-    }
-
-    return response()->json([
-      'data' => $kvData,
-    ]);
+    return $this->service->show($id);
   }
 
-  public function show(string $id): JsonResponse
+  public function keyValue(Request $request)
   {
-    return response()->json([
-      'data' => $this->model::find($id)
-    ]);
+    return $this->service->keyValue($request);
   }
 
-  public function store(Request $request): JsonResponse
+  // abstract public function store(Request $request): JsonResponse;
+  // abstract public function update(Request $request, $id): JsonResponse;
+
+  public function destroy($id): JsonResponse
   {
-    $modelClass = $this->model;
-    $fillableFields = (new $modelClass())->getFillable();
-
-    $obModel = $modelClass::create($request->only($fillableFields));
-
-    return response()->json([
-      'message' => 'Operação efetuada com sucesso',
-      'data' => $obModel,
-    ]);
-  }
-
-  public function update(Request $request, $id): JsonResponse
-  {
-    $modelClass = $this->model;
-
-    $obModel = $modelClass::findOrFail($id);
-    $obModel->update($request->only($obModel->getFillable()));
-
-    return response()->json([
-      'message' => 'Operação efetuada com sucesso',
-      'data' => $obModel,
-    ]);
-  }
-
-  public function destroy(string $id): JsonResponse
-  {
-    $this->model::find($id)->delete();
-
-    return response()->json([
-      'message' => 'Operação efetuada com sucesso'
-    ]);
+    return $this->service->destroy($id);
   }
 }
