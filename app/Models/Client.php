@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Http\Controllers\Model;
+use App\Core\Model;
 
 class Client extends Model
 {

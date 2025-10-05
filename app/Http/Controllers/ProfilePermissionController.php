@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
+use App\Core\Controller;
 use App\Models\ProfilePermission;
 
 class ProfilePermissionController extends Controller

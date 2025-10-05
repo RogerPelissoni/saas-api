@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Core;
 
 abstract class Model extends \Illuminate\Database\Eloquent\Model
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers;
 
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Http\Request;
@@ -8,9 +8,9 @@ use Illuminate\Http\Request;
 class MultipleController
 {
   private array $allowedMethods = [
-    'client' => [\App\Http\Controllers\Api\ClientController::class, 'index'],
-    'profile' => [\App\Http\Controllers\Api\ProfileController::class, 'index'],
-    'user' => [\App\Http\Controllers\Api\UserController::class, 'index'],
+    'client' => [\App\Http\Controllers\ClientController::class, 'index'],
+    'profile' => [\App\Http\Controllers\ProfileController::class, 'index'],
+    'user' => [\App\Http\Controllers\UserController::class, 'index'],
   ];
 
   public function index(Request $request)
