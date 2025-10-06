@@ -10,7 +10,7 @@ return new class extends Migration {
     Schema::create('resource', function (Blueprint $table) {
       $table->id();
       $table->string('name', 50);
-      $table->string('resource', 100)->unique();
+      $table->string('signature', 100)->unique();
       $table->timestamps();
     });
   }

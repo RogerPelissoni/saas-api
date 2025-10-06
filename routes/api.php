@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\RouteAccessMiddleware;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('auth')->group(function () {
@@ -12,7 +13,7 @@ Route::prefix('auth')->group(function () {
   });
 });
 
-Route::middleware('auth:sanctum')->group(function () {
+Route::middleware(['auth:sanctum', RouteAccessMiddleware::class])->group(function () {
   // Get
   // Post
   Route::post('multiple', [\App\Http\Controllers\MultipleController::class, 'index']);

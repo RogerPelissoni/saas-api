@@ -21,4 +21,19 @@ class User extends Authenticatable
     'password',
     'remember_token',
   ];
+
+  public static function current(string|false $attribute = false)
+  {
+    $user = auth()->guard('sanctum')->user();
+
+    if (!$user) {
+      return null;
+    }
+
+    if ($attribute) {
+      return data_get($user, $attribute); // acessa nested properties usando '->'
+    }
+
+    return $user;
+  }
 }

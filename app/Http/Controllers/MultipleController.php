@@ -23,14 +23,14 @@ class MultipleController
 
     $arrReturn = [];
 
-    foreach ($request->models as $modelParams) {
-      $dsModel = $modelParams['model'];
+    foreach ($request->signatures as $modelParams) {
+      $dsSignature = $modelParams['signature'];
 
-      if (!array_key_exists($dsModel, $this->allowedMethods)) {
+      if (!array_key_exists($dsSignature, $this->allowedMethods)) {
         continue;
       }
 
-      [$controllerClass, $method] = $this->allowedMethods[$dsModel];
+      [$controllerClass, $method] = $this->allowedMethods[$dsSignature];
 
       if ($modelParams['keyValue'] ?? null) {
         $method = 'keyValue';
@@ -40,18 +40,18 @@ class MultipleController
         $controller = app($controllerClass);
         $response = $controller->$method($request);
 
-        $arrReturn[$dsModel] = $response instanceof \Illuminate\Http\JsonResponse
+        $arrReturn[$dsSignature] = $response instanceof \Illuminate\Http\JsonResponse
           ? $response->getData(true)
           : $response;
 
-        if (isset($arrReturn[$dsModel]['data'])) {
-          $arrReturn[$dsModel] = $arrReturn[$dsModel]['data'];
+        if (isset($arrReturn[$dsSignature]['data'])) {
+          $arrReturn[$dsSignature] = $arrReturn[$dsSignature]['data'];
         }
 
       } catch (\Throwable $e) {
-        info("Erro ao processar {$dsModel}: " . $e->getMessage());
+        info("Erro ao processar {$dsSignature}: " . $e->getMessage());
 
-        $arrReturn[$dsModel] = [
+        $arrReturn[$dsSignature] = [
           'error' => 'Falha ao carregar dados deste recurso'
         ];
       }

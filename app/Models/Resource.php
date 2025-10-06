@@ -9,6 +9,6 @@ class Resource extends Model
   protected $table = 'resource';
   protected $fillable = [
     'name',
-    'resource',
+    'signature',
   ];
 }

@@ -18,7 +18,7 @@ class ResourceSeeder extends Seeder
     foreach (ResourceConfig::get() as $arrResourceParams) {
       Resource::updateOrCreate(
         [
-          'resource' => $arrResourceParams['resource']
+          'signature' => $arrResourceParams['signature']
         ],
         $arrResourceParams
       );

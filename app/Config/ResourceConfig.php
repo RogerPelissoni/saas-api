@@ -8,8 +8,8 @@ class ResourceConfig
   public static function get(): array
   {
     return [
-      ['name' => 'Perfil', 'resource' => 'profile'],
-      ['name' => 'Usuário', 'resource' => 'user'],
+      ['name' => 'Perfil', 'signature' => 'profile'],
+      ['name' => 'Usuário', 'signature' => 'user'],
     ];
   }
 
@@ -19,13 +19,13 @@ class ResourceConfig
 
     foreach ($arrResources as $sResource) {
       Resource::updateOrCreate([
-        'resource' => $sResource['resource']
+        'signature' => $sResource['signature']
       ], [
         'name' => $sResource['name']
       ]);
     }
 
-    $arrResources = array_column($arrResources, 'resource');
-    Resource::whereNotIn('resource', $arrResources)->delete();
+    $arrResources = array_column($arrResources, 'signature');
+    Resource::whereNotIn('signature', $arrResources)->delete();
   }
 }
