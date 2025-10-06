@@ -3,6 +3,7 @@ namespace App\Services;
 
 use App\Models\ProfilePermission;
 use Illuminate\Http\JsonResponse;
+use App\Helpers\ResponseHelper;
 use Illuminate\Http\Request;
 use App\Models\Resource;
 use App\Models\Profile;
@@ -26,9 +27,7 @@ class ProfileService extends Service
       })
       ->get();
 
-    return response()->json([
-      'data' => $obProfilePermission,
-    ]);
+    return ResponseHelper::success(data: $obProfilePermission);
   }
 
   public function store(Request $request): JsonResponse
@@ -40,10 +39,7 @@ class ProfileService extends Service
 
     $this->syncPermissions($obModel->id, $request->permissions);
 
-    return response()->json([
-      'message' => 'Operação efetuada com sucesso',
-      'data' => $obModel,
-    ]);
+    return ResponseHelper::success(data: $obModel);
   }
 
   public function update(Request $request, $id): JsonResponse
@@ -56,10 +52,7 @@ class ProfileService extends Service
 
     $this->syncPermissions($idProfile, $request->permissions);
 
-    return response()->json([
-      'message' => 'Operação efetuada com sucesso',
-      'data' => $obModel,
-    ]);
+    return ResponseHelper::success(data: $obModel);
   }
 
   private function syncPermissions($idProfile, $arrPermissions): void

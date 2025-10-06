@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Symfony\Component\HttpFoundation\Response;
+use App\Helpers\ResponseHelper;
 use Illuminate\Http\Request;
 
 class MultipleController
@@ -18,7 +18,7 @@ class MultipleController
     $requestedModels = $request->input('models', []);
 
     if (!is_array($requestedModels)) {
-      return response()->json(['message' => 'O parâmetro "models" deve ser uma lista'], Response::HTTP_BAD_REQUEST);
+      return ResponseHelper::error(message: 'O parâmetro "models" deve ser uma lista');
     }
 
     $arrReturn = [];
@@ -38,7 +38,7 @@ class MultipleController
 
       try {
         $controller = app($controllerClass);
-        $response = $controller->$method();
+        $response = $controller->$method($request);
 
         $arrReturn[$dsModel] = $response instanceof \Illuminate\Http\JsonResponse
           ? $response->getData(true)
@@ -57,8 +57,6 @@ class MultipleController
       }
     }
 
-    return response()->json([
-      'data' => $arrReturn,
-    ]);
+    return ResponseHelper::success(data: $arrReturn);
   }
 }
