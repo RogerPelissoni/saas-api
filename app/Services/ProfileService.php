@@ -4,6 +4,7 @@ namespace App\Services;
 use App\Models\ProfilePermission;
 use Illuminate\Http\JsonResponse;
 use App\Helpers\ResponseHelper;
+use App\Config\ResourceConfig;
 use Illuminate\Http\Request;
 use App\Models\Resource;
 use App\Models\Profile;
@@ -15,6 +16,8 @@ class ProfileService extends Service
 
   public function getPermissionsByProfile(Request $request)
   {
+    ResourceConfig::sync();
+
     $obProfilePermission = Resource::select([
       'profile_permission.id AS profile_permission_id',
       'profile_permission.permission_level',

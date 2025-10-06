@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Config\ResourceConfig;
 use Illuminate\Database\Seeder;
 use App\Models\Resource;
 
@@ -14,15 +15,12 @@ class ResourceSeeder extends Seeder
 
   private function seedResources(): void
   {
-    $resources = [
-      ['name' => 'Perfil', 'resource' => 'profile'],
-      ['name' => 'Usuário', 'resource' => 'user'],
-    ];
-
-    foreach ($resources as $res) {
+    foreach (ResourceConfig::get() as $arrResourceParams) {
       Resource::updateOrCreate(
-        ['resource' => $res['resource']],
-        $res
+        [
+          'resource' => $arrResourceParams['resource']
+        ],
+        $arrResourceParams
       );
     }
   }
