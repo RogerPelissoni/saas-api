@@ -28,4 +28,11 @@ return Application::configure(basePath: dirname(__DIR__))
         ]
       ], 401);
     });
+
+    $exceptions->render(function (\Exception $e, Request $request) {
+      return response()->json([
+        'status' => 'error',
+        'message' => $e->getMessage(),
+      ], $e->getCode() ?: 400);
+    });
   })->create();

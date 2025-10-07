@@ -10,7 +10,7 @@ return new class extends Migration {
     Schema::create('profile', function (Blueprint $table) {
       $table->id();
       $table->string('name', 50)->unique();
-      $table->text('description')->nullable();
+      $table->text('ds_description')->nullable();
       $table->timestamps();
     });
   }
