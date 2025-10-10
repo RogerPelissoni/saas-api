@@ -16,7 +16,7 @@ return new class extends Migration {
       $table->date('da_nascimento')->nullable();
       // $table->json('meta')->nullable(); // campos extras por tipo de empresa
 
-      MigrationAuditables::init($table);
+      MigrationAuditables::init($table)->inject();
     });
   }
 
