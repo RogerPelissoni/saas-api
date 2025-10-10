@@ -2,6 +2,7 @@
 
 namespace App\Core;
 
+use Illuminate\Database\Eloquent\Builder;
 use App\Models\User;
 
 abstract class Model extends \Illuminate\Database\Eloquent\Model
@@ -9,6 +10,7 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model
   public static string $kvKey = 'id';
   public static array $kvValues = ['name'];
 
+  protected static array $tableCache = [];
   protected array $autoFillables = [
     'company_id',
     'created_by',
@@ -17,17 +19,18 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model
 
   protected static function booted(): void
   {
-    static::creating(function ($model) {
-      self::injectAuditables($model, 'create');
+    // Default Filter
+    static::addGlobalScope('company', function (Builder $builder) {
+      $obUser = User::current();
+
+      if ($obUser?->company_id && self::hasColumnCached('company_id')) {
+        $builder->where($builder->getModel()->getTable() . '.company_id', $obUser->company_id);
+      }
     });
 
-    static::updating(function ($model) {
-      self::injectAuditables($model, 'update');
-    });
-
-    // static::deleting(function ($model) {
-    //   // Código executado ANTES de deletar
-    // });
+    // Auditable
+    static::creating(fn($model) => self::injectAuditables($model, 'create'));
+    static::updating(fn($model) => self::injectAuditables($model, 'update'));
   }
 
   private static function injectAuditables($model, $eventType): void
@@ -49,5 +52,16 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model
     } else if ($eventType === 'update') {
       $model->updated_by = $obCurrentUser->id;
     }
+  }
+
+  protected static function hasColumnCached(string $column): bool
+  {
+    $table = (new static)->getTable();
+
+    if (!isset(self::$tableCache[$table])) {
+      self::$tableCache[$table] = \Illuminate\Support\Facades\Schema::getColumnListing($table);
+    }
+
+    return in_array($column, self::$tableCache[$table], true);
   }
 }
