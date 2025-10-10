@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Core\Controller;
 use Illuminate\Support\Facades\Hash;
+use App\Models\ProfilePermission;
 use Illuminate\Http\Request;
+use App\Core\Controller;
 use App\Models\User;
 
 class AuthController extends Controller
@@ -12,21 +13,21 @@ class AuthController extends Controller
   public function register(Request $request)
   {
     $data = $request->validate([
-      'name'     => 'required|string|max:255',
-      'email'    => 'required|email|unique:users',
+      'name' => 'required|string|max:255',
+      'email' => 'required|email|unique:users',
       'password' => 'required|min:6',
     ]);
 
     $user = User::create([
-      'name'     => $data['name'],
-      'email'    => $data['email'],
+      'name' => $data['name'],
+      'email' => $data['email'],
       'password' => Hash::make($data['password']),
     ]);
 
     $token = $user->createToken('api-token')->plainTextToken;
 
     return response()->json([
-      'user'  => $user,
+      'user' => $user,
       'token' => $token,
     ], 201);
   }
@@ -34,7 +35,7 @@ class AuthController extends Controller
   public function login(Request $request)
   {
     $credentials = $request->validate([
-      'email'    => ['required', 'email'],
+      'email' => ['required', 'email'],
       'password' => ['required'],
     ]);
 
@@ -47,8 +48,9 @@ class AuthController extends Controller
     $token = $user->createToken('api-token')->plainTextToken;
 
     return response()->json([
-      'user'  => $user,
+      'user' => $user,
       'token' => $token,
+      'permissions' => $this->getProfilePermissions($user->profile_id, $user->company_id),
     ]);
   }
 
@@ -61,5 +63,18 @@ class AuthController extends Controller
   {
     $request->user()->currentAccessToken()->delete();
     return response()->json(['message' => 'Logout realizado com sucesso']);
+  }
+
+  private function getProfilePermissions($idProfile, $idCompany)
+  {
+    $obProfilePermission = ProfilePermission::select([
+      'resource.signature',
+      'profile_permission.permission_level',
+    ])
+      ->join('resource', 'resource.id', '=', 'profile_permission.resource_id')
+      ->where('profile_id', $idProfile)
+      ->where('profile_permission.company_id', $idCompany);
+
+    return $obProfilePermission->get();
   }
 }

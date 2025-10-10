@@ -2,7 +2,7 @@
 
 namespace App\Core;
 
-use Illuminate\Database\Eloquent\Builder;
+use App\Scopes\CompanyScope;
 use App\Models\User;
 
 abstract class Model extends \Illuminate\Database\Eloquent\Model
@@ -19,16 +19,8 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model
 
   protected static function booted(): void
   {
-    // Default Filter
-    static::addGlobalScope('company', function (Builder $builder) {
-      $obUser = User::current();
+    static::addGlobalScope(new CompanyScope);
 
-      if ($obUser?->company_id && self::hasColumnCached('company_id')) {
-        $builder->where($builder->getModel()->getTable() . '.company_id', $obUser->company_id);
-      }
-    });
-
-    // Auditable
     static::creating(fn($model) => self::injectAuditables($model, 'create'));
     static::updating(fn($model) => self::injectAuditables($model, 'update'));
   }
