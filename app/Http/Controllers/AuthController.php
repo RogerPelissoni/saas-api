@@ -75,6 +75,6 @@ class AuthController extends Controller
       ->where('profile_id', $idProfile)
       ->where('profile_permission.company_id', $idCompany);
 
-    return $obProfilePermission->get();
+    return $obProfilePermission->pluck('permission_level', 'signature');
   }
 }
