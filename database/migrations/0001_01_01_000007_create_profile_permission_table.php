@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use App\Core\MigrationAuditables;
 
 return new class extends Migration {
   public function up(): void
@@ -13,10 +14,10 @@ return new class extends Migration {
       $table->unsignedBigInteger('resource_id');
       $table->integer('permission_level')->default(1);
 
-      $table->timestamps();
-
       $table->foreign('profile_id')->references('id')->on('profile')->onDelete('cascade');
       $table->foreign('resource_id')->references('id')->on('resource')->onDelete('cascade');
+
+      MigrationAuditables::init($table)->inject();
     });
   }
 

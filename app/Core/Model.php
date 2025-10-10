@@ -32,6 +32,10 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model
 
   private static function injectAuditables($model, $eventType): void
   {
+    if (app()->runningInConsole() && !app()->runningUnitTests()) {
+      return;
+    }
+
     $obCurrentUser = User::current();
 
     if ($eventType === 'create') {
