@@ -10,6 +10,8 @@ class User extends Authenticatable
 {
   use HasApiTokens, Notifiable;
 
+  protected static ?self $cachedUser = null;
+
   protected $fillable = [
     'name',
     'email',
@@ -25,16 +27,15 @@ class User extends Authenticatable
 
   public static function current(string|false $attribute = false)
   {
-    $user = auth()->guard('sanctum')->user();
+    if (self::$cachedUser === null) {
+      self::$cachedUser = auth()->guard('sanctum')->user();
+    }
 
-    if (!$user) {
+    $user = self::$cachedUser;
+
+    if (!$user)
       return null;
-    }
 
-    if ($attribute) {
-      return data_get($user, $attribute); // acessa nested properties usando '->'
-    }
-
-    return $user;
+    return $attribute ? data_get($user, $attribute) : $user;
   }
 }
