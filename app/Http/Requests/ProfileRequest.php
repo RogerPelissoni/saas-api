@@ -18,7 +18,7 @@ class ProfileRequest extends FormRequest
       // permissions array
       'permissions' => 'sometimes|array',
       'permissions.*.resource_id' => 'required_with:permissions|integer|exists:resource,id',
-      'permissions.*.permission_level' => 'nullable|integer|min:1',
+      'permissions.*.permission_level' => 'nullable|integer',
       'permissions.*.profile_permission_id' => 'nullable|integer|exists:profile_permission,id',
     ];
   }
