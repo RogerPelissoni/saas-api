@@ -12,7 +12,10 @@ abstract class Service
 
   public function index(Request $request): JsonResponse
   {
-    return ResponseHelper::success(data: $this->model::all());
+    $obModel = $this->model::query();
+    QueryHelper::injectFilters($obModel, $request->filters);
+
+    return ResponseHelper::success(data: $obModel->get());
   }
 
   public function show(string $id): JsonResponse
