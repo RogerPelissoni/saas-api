@@ -72,8 +72,11 @@ class AuthController extends Controller
       'profile_permission.permission_level',
     ])
       ->join('resource', 'resource.id', '=', 'profile_permission.resource_id')
-      ->where('profile_id', $idProfile)
-      ->where('profile_permission.company_id', $idCompany);
+      ->where('profile_id', $idProfile);
+
+    if ($idCompany) {
+      $obProfilePermission->where('profile_permission.company_id', $idCompany);
+    }
 
     return $obProfilePermission->pluck('permission_level', 'signature');
   }
