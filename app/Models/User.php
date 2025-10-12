@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
@@ -25,6 +26,13 @@ class User extends Authenticatable
     'remember_token',
   ];
 
+  // Relations
+  public function profile(): BelongsTo
+  {
+    return $this->belongsTo(Profile::class);
+  }
+
+  // Aux
   public static function current(string|false $attribute = false)
   {
     if (self::$cachedUser === null) {

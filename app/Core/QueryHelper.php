@@ -18,4 +18,16 @@ class QueryHelper
       $obModel->where($paramsFilter['field'], $matchMode, $vlFilter);
     }
   }
+
+  public static function injectSort(&$obModel, $requestSort): void
+  {
+    $paramsSort = json_decode($requestSort, true);
+
+    if (!isset($paramsSort['direction'])) {
+      return;
+    }
+
+    $orderColumn = $paramsSort['columnFilter'] ?? $paramsSort['columnBase'];
+    $obModel->orderBy($orderColumn, $paramsSort['direction']);
+  }
 }
