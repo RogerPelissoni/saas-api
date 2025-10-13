@@ -2,7 +2,6 @@
 namespace App\Services;
 
 use Illuminate\Http\JsonResponse;
-use App\Helpers\ResponseHelper;
 use Illuminate\Http\Request;
 use App\Core\QueryHelper;
 use App\Core\Service;
@@ -26,9 +25,6 @@ class UserService extends Service
       ->join('profile', 'profile.id', '=', 'users.profile_id')
       ->leftJoin('company', 'company.id', '=', 'users.company_id');
 
-    QueryHelper::injectFilters($obModel, $request->filters);
-    QueryHelper::injectSort($obModel, $request->sort);
-
-    return ResponseHelper::success(data: $obModel->get());
+    return QueryHelper::resolve($obModel, $request);
   }
 }

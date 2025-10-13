@@ -45,9 +45,7 @@ class MultipleController
           ? $response->getData(true)
           : $response;
 
-        if (isset($arrReturn[$dsSignature]['data'])) {
-          $arrReturn[$dsSignature] = $arrReturn[$dsSignature]['data'];
-        }
+        $arrReturn[$dsSignature] = $arrReturn[$dsSignature]['data']['data'] ?? $arrReturn[$dsSignature]['data'] ?? $arrReturn[$dsSignature];
 
       } catch (\Throwable $e) {
         info("Erro ao processar {$dsSignature}: " . $e->getMessage());

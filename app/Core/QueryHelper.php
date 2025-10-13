@@ -1,8 +1,22 @@
 <?php
 namespace App\Core;
 
+use App\Helpers\ResponseHelper;
+
 class QueryHelper
 {
+  public static function resolve($obModel, $request)
+  {
+    QueryHelper::injectFilters($obModel, $request->filters);
+    QueryHelper::injectSort($obModel, $request->sort);
+
+    $data = empty($request->perPage)
+      ? $obModel->get()
+      : $obModel->paginate($request->perPage);
+
+    return ResponseHelper::success(data: $data);
+  }
+
   public static function injectFilters(&$obModel, $requestFilters): void
   {
     $arrFilters = json_decode($requestFilters, true);
