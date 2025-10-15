@@ -13,6 +13,14 @@ return new class extends Migration {
       $table->string('ds_email')->nullable();
       $table->string('ds_phone')->nullable();
       $table->string('ds_address')->nullable();
+      
+      // $table->unsignedBigInteger('plan_id')->nullable(); // plano SaaS
+      /**
+       * Implementar tipo de plano futuramente
+       * Plano Bronze, Prata, Ouro por exemplo
+       * Cada plano terá acesso a determinados modulos (financeiro, agenda, etc)
+       */
+
       $table->timestamps();
     });
   }

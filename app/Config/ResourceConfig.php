@@ -8,7 +8,7 @@ class ResourceConfig
   public static function get(): array
   {
     return [
-      ['name' => 'Clientes', 'signature' => 'cliente'],
+      ['name' => 'Clientes', 'signature' => 'client'],
       ['name' => 'Empresas', 'signature' => 'company'],
       ['name' => 'Perfil', 'signature' => 'profile'],
       ['name' => 'Usuário', 'signature' => 'user'],

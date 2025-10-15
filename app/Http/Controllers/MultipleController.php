@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 class MultipleController
 {
   private array $allowedMethods = [
-    'cliente' => [\App\Http\Controllers\ClienteController::class, 'index'],
+    'client' => [\App\Http\Controllers\ClientController::class, 'index'],
     'company' => [\App\Http\Controllers\CompanyController::class, 'index'],
     'profile' => [\App\Http\Controllers\ProfileController::class, 'index'],
     'user' => [\App\Http\Controllers\UserController::class, 'index'],

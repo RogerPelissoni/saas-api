@@ -8,12 +8,13 @@ use App\Core\MigrationAuditables;
 return new class extends Migration {
   public function up(): void
   {
-    Schema::create('cliente', function (Blueprint $table) {
+    Schema::create('client', function (Blueprint $table) {
       $table->id();
       $table->string('name');
-      $table->string('ds_email')->nullable();
-      $table->string('ds_telefone')->nullable();
-      $table->date('da_nascimento')->nullable();
+      $table->string('ds_mail')->nullable();
+      $table->string('ds_phone')->nullable();
+      $table->string('ds_address')->nullable();
+      $table->date('da_birth')->nullable();
       // $table->json('meta')->nullable(); // campos extras por tipo de empresa
 
       MigrationAuditables::init($table)->inject();
@@ -22,7 +23,7 @@ return new class extends Migration {
 
   public function down(): void
   {
-    Schema::dropIfExists('cliente');
+    Schema::dropIfExists('client');
   }
 };
 

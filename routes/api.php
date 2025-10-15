@@ -19,7 +19,7 @@ Route::middleware(['auth:sanctum', RouteAccessMiddleware::class])->group(functio
   Route::post('multiple', [\App\Http\Controllers\MultipleController::class, 'index']);
   Route::post('profile/permissions', [\App\Http\Controllers\ProfileController::class, 'getPermissionsByProfile']);
   // Resources
-  Route::apiResource('cliente', \App\Http\Controllers\ClienteController::class);
+  Route::apiResource('client', \App\Http\Controllers\ClientController::class);
   Route::apiResource('company', \App\Http\Controllers\CompanyController::class);
   Route::apiResource('profile', \App\Http\Controllers\ProfileController::class);
   Route::apiResource('user', \App\Http\Controllers\UserController::class);
