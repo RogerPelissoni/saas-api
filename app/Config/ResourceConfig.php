@@ -5,10 +5,10 @@ use Core\Config\ResourceConfigCore;
 
 class ResourceConfig extends ResourceConfigCore
 {
-  public static function get(): array
+  protected static function resources(): array
   {
-    return array_merge(parent::get(), [
+    return [
       ['name' => 'Clientes', 'signature' => 'client'],
-    ]);
+    ];
   }
 }

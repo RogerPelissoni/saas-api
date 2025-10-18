@@ -5,13 +5,23 @@ use Core\Models\Resource;
 
 abstract class ResourceConfigCore
 {
-  public static function get(): array
+  protected static function resources(): array
+  {
+    return [];
+  }
+
+  protected static function defaultResources(): array
   {
     return [
       ['name' => 'Empresas', 'signature' => 'company'],
       ['name' => 'Perfil', 'signature' => 'profile'],
       ['name' => 'Usuário', 'signature' => 'user'],
     ];
+  }
+
+  public static function get(): array
+  {
+    return array_merge(static::resources(), static::defaultResources());
   }
 
   public static function sync()
