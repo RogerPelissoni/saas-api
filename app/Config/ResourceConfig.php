@@ -1,33 +1,14 @@
 <?php
 namespace App\Config;
 
-use App\Models\Resource;
+use Core\Config\ResourceConfigCore;
 
-class ResourceConfig
+class ResourceConfig extends ResourceConfigCore
 {
   public static function get(): array
   {
-    return [
+    return array_merge(parent::get(), [
       ['name' => 'Clientes', 'signature' => 'client'],
-      ['name' => 'Empresas', 'signature' => 'company'],
-      ['name' => 'Perfil', 'signature' => 'profile'],
-      ['name' => 'Usuário', 'signature' => 'user'],
-    ];
-  }
-
-  public static function sync()
-  {
-    $arrResources = self::get();
-
-    foreach ($arrResources as $sResource) {
-      Resource::updateOrCreate([
-        'signature' => $sResource['signature']
-      ], [
-        'name' => $sResource['name']
-      ]);
-    }
-
-    $arrResources = array_column($arrResources, 'signature');
-    Resource::whereNotIn('signature', $arrResources)->delete();
+    ]);
   }
 }

@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Core\Model;
+use Core\Model;
 
 class Client extends Model
 {

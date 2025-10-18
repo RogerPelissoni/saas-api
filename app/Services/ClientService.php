@@ -1,7 +1,7 @@
 <?php
 namespace App\Services;
 
-use App\Core\Service;
+use Core\Service;
 use App\Models\Client;
 
 class ClientService extends Service

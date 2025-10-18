@@ -14,10 +14,13 @@ return Application::configure(basePath: dirname(__DIR__))
   )
   ->withMiddleware(function (Middleware $middleware): void {
     $middleware->api(prepend: [
-      \App\Http\Middleware\TransactionMiddleware::class,
+      \Core\Middleware\TransactionMiddleware::class,
       \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
     ]);
   })
+  ->withProviders([
+    \Core\Providers\CoreServiceProvider::class,
+  ])
   ->withExceptions(function (Exceptions $exceptions): void {
     $exceptions->render(function (AuthenticationException $e, Request $request) {
       return response()->json([

@@ -3,12 +3,12 @@
 namespace Database\Seeders;
 
 use Illuminate\Support\Facades\Schema;
-use App\Enums\PermissionLevelEnum;
-use App\Models\ProfilePermission;
+use Core\Enums\PermissionLevelEnum;
+use Core\Models\ProfilePermission;
 use Illuminate\Database\Seeder;
-use App\Models\Resource;
-use App\Models\Profile;
-use App\Models\Company;
+use Core\Models\Resource;
+use Core\Models\Profile;
+use Core\Models\Company;
 use App\Models\User;
 
 class DatabaseSeeder extends Seeder
