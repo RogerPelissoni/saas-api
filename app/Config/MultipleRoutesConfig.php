@@ -10,6 +10,7 @@ class MultipleRoutesConfig extends MultipleRoutesCoreConfig
     return [
       'client' => [\App\Http\Controllers\ClientController::class, 'index'],
       'event' => [\App\Http\Controllers\EventController::class, 'index'],
+      'professional' => [\App\Http\Controllers\ProfessionalController::class, 'index'],
     ];
   }
 }

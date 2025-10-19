@@ -9,6 +9,7 @@ class ResourceConfig extends ResourceConfigCore
   {
     return [
       ['name' => 'Clientes', 'signature' => 'client'],
+      ['name' => 'Profissionais', 'signature' => 'professional'],
     ];
   }
 }
