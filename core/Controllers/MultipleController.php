@@ -23,7 +23,7 @@ class MultipleController
       $dsSignature = $modelParams['signature'];
 
       if (!array_key_exists($dsSignature, $allowedMethods)) {
-        continue;
+        throw new \Exception("Recurso $dsSignature não disponível");
       }
 
       [$controllerClass, $method] = $allowedMethods[$dsSignature];

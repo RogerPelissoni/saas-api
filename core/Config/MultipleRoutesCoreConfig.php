@@ -1,7 +1,7 @@
 <?php
 namespace Core\Config;
 
-class MultipleRoutesCoreConfig
+abstract class MultipleRoutesCoreConfig
 {
   protected static function getAllowedMethods(): array
   {
@@ -20,6 +20,6 @@ class MultipleRoutesCoreConfig
 
   public static function get(): array
   {
-    return array_merge(self::getAllowedMethods(), self::getAllowedMethodsCore());
+    return array_merge(static::getAllowedMethods(), static::getAllowedMethodsCore());
   }
 }
