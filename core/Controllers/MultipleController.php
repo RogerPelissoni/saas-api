@@ -8,19 +8,9 @@ use Illuminate\Http\Request;
 
 class MultipleController
 {
-  private array $allowedMethods = [
-    'company' => [\Core\Controllers\CompanyController::class, 'index'],
-    'profile' => [\Core\Controllers\ProfileController::class, 'index'],
-    'user' => [\Core\Controllers\UserController::class, 'index'],
-  ];
-
-  public function __construct()
-  {
-    $this->allowedMethods = array_merge($this->allowedMethods, MultipleRoutesConfig::getAllowedMethods());
-  }
-
   public function index(Request $request)
   {
+    $allowedMethods = MultipleRoutesConfig::get();
     $requestedModels = $request->input('models', []);
 
     if (!is_array($requestedModels)) {
@@ -32,11 +22,11 @@ class MultipleController
     foreach ($request->signatures as $modelParams) {
       $dsSignature = $modelParams['signature'];
 
-      if (!array_key_exists($dsSignature, $this->allowedMethods)) {
+      if (!array_key_exists($dsSignature, $allowedMethods)) {
         continue;
       }
 
-      [$controllerClass, $method] = $this->allowedMethods[$dsSignature];
+      [$controllerClass, $method] = $allowedMethods[$dsSignature];
 
       if ($modelParams['keyValue'] ?? null) {
         $method = 'keyValue';

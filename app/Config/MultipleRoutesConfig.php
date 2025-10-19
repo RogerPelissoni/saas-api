@@ -1,9 +1,11 @@
 <?php
 namespace App\Config;
 
-class MultipleRoutesConfig
+use Core\Config\MultipleRoutesCoreConfig;
+
+class MultipleRoutesConfig extends MultipleRoutesCoreConfig
 {
-  public static function getAllowedMethods(): array
+  protected static function getAllowedMethods(): array
   {
     return [
       'client' => [\App\Http\Controllers\ClientController::class, 'index'],

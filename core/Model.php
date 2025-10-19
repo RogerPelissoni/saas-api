@@ -2,6 +2,7 @@
 
 namespace Core;
 
+use Illuminate\Support\Facades\Schema;
 use Core\Scopes\CompanyScope;
 use App\Models\User;
 
@@ -34,15 +35,25 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model
     $obCurrentUser = User::current();
 
     if ($eventType === 'create') {
-      if (!$obCurrentUser->company_id && !$model->company_id) {
-        throw new \Exception("Usuário não possui Empresa vinculada, impossibilitando a criação de registros 'avulsos'");
+      if (Schema::hasColumn($model->getTable(), 'company_id')) {
+        if (!$obCurrentUser->company_id && !$model->company_id) {
+          throw new \Exception("Usuário não possui Empresa vinculada, impossibilitando a criação de registros 'avulsos'");
+        }
+
+        $model->company_id = $obCurrentUser->company_id;
       }
 
-      $model->company_id = $obCurrentUser->company_id;
-      $model->created_by = $obCurrentUser->id;
-      $model->updated_by = $obCurrentUser->id;
+      if (Schema::hasColumn($model->getTable(), 'created_by')) {
+        $model->created_by = $obCurrentUser->id;
+      }
+
+      if (Schema::hasColumn($model->getTable(), 'updated_by')) {
+        $model->updated_by = $obCurrentUser->id;
+      }
     } else if ($eventType === 'update') {
-      $model->updated_by = $obCurrentUser->id;
+      if (Schema::hasColumn($model->getTable(), 'updated_by')) {
+        $model->updated_by = $obCurrentUser->id;
+      }
     }
   }
 

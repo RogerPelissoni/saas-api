@@ -19,6 +19,7 @@ Route::middleware(['auth:sanctum', \Core\Middleware\RouteAccessMiddleware::class
   Route::post('profile/permissions', [\Core\Controllers\ProfileController::class, 'getPermissionsByProfile']);
   // Resources
   Route::apiResource('company', \Core\Controllers\CompanyController::class);
+  Route::apiResource('person', \Core\Controllers\PersonController::class);
   Route::apiResource('profile', \Core\Controllers\ProfileController::class);
   Route::apiResource('user', \Core\Controllers\UserController::class);
 });

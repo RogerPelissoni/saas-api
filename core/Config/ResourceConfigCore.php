@@ -14,6 +14,7 @@ abstract class ResourceConfigCore
   {
     return [
       ['name' => 'Empresas', 'signature' => 'company'],
+      ['name' => 'Pessoa', 'signature' => 'person'],
       ['name' => 'Perfil', 'signature' => 'profile'],
       ['name' => 'Usuário', 'signature' => 'user'],
     ];
