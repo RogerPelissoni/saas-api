@@ -4,6 +4,7 @@ namespace Core\Middleware;
 use Symfony\Component\HttpFoundation\Response;
 use Core\Enums\PermissionLevelEnum;
 use Core\Models\ProfilePermission;
+use App\Config\PermissionConfig;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Closure;
@@ -50,10 +51,19 @@ class RouteAccessMiddleware
     return $permissionLevel ?? null;
   }
 
-  private static function hasPermissionToRead($permissionLevel, $nmSignature): void
+  private static function hasPermissionToRead(int|null $permissionLevel, string $nmSignature): void
   {
-    if ($permissionLevel < PermissionLevelEnum::READ->level()) {
-      throw new \Exception("Permissão insuficiente para acessar o recurso $nmSignature");
+    $requiredLevel = PermissionLevelEnum::READ->level();
+
+    if ($permissionLevel >= $requiredLevel) {
+      return;
+    }
+
+    $defaultLevel = PermissionConfig::getDefault($nmSignature);
+
+    if ($defaultLevel < $requiredLevel) {
+      throw new \RuntimeException("Permissão insuficiente para leitura do recurso $nmSignature");
     }
   }
+
 }

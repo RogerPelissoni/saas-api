@@ -7,6 +7,7 @@ class MultipleRoutesConfig
   {
     return [
       'client' => [\App\Http\Controllers\ClientController::class, 'index'],
+      'event' => [\App\Http\Controllers\EventController::class, 'index'],
     ];
   }
 }
