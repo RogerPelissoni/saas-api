@@ -8,10 +8,7 @@ class Client extends Model
 {
   protected $table = 'client';
   protected $fillable = [
-    'name',
-    'ds_mail',
-    'ds_phone',
-    'ds_address',
-    'da_birth',
+    'person_id',
+    'da_registration',
   ];
 }

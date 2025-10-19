@@ -10,7 +10,7 @@ return new class extends Migration {
   {
     Schema::create('account_payable', function (Blueprint $table) {
       $table->id();
-      $table->unsignedBigInteger('supplier_client_id');
+      $table->unsignedBigInteger('person_id');
 
       $table->string('ds_title');
       $table->integer('nr_installment');
@@ -24,7 +24,7 @@ return new class extends Migration {
       $table->enum('tp_status', ['pending', 'paid']);
       $table->text('ds_observations');
 
-      $table->foreign('supplier_client_id')->references('id')->on('client')->onUpdate('cascade')->onDelete('restrict');
+      $table->foreign('person_id')->references('id')->on('person')->onUpdate('cascade')->onDelete('restrict');
       $table->unique(['ds_title', 'nr_installment']);
 
       MigrationAuditables::init($table)->inject();

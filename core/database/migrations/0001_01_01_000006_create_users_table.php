@@ -15,9 +15,11 @@ return new class extends Migration {
       $table->string('password');
       $table->unsignedBigInteger('profile_id');
       $table->unsignedBigInteger('company_id')->nullable();
+      $table->unsignedBigInteger('person_id')->nullable();
       $table->rememberToken();
       $table->timestamps();
 
+      $table->foreign('person_id')->references('id')->on('person')->onUpdate('cascade')->onDelete('restrict');
       $table->foreign('company_id')->references('id')->on('company')->onUpdate('cascade')->onDelete('cascade');
       $table->foreign('profile_id')->references('id')->on('profile')->onUpdate('cascade')->onDelete('cascade');
     });

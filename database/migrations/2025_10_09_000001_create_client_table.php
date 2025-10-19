@@ -10,13 +10,10 @@ return new class extends Migration {
   {
     Schema::create('client', function (Blueprint $table) {
       $table->id();
-      $table->string('name');
-      $table->string('ds_mail')->nullable();
-      $table->string('ds_phone')->nullable();
-      $table->string('ds_address')->nullable();
-      $table->date('da_birth')->nullable();
-      // $table->json('meta')->nullable(); // campos extras por tipo de empresa
+      $table->unsignedBigInteger('person_id');
+      $table->date('da_registration')->nullable();
 
+      $table->foreign('person_id')->references('id')->on('person')->onUpdate('cascade')->onDelete('restrict');
       MigrationAuditables::init($table)->inject();
     });
   }

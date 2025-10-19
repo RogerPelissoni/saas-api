@@ -19,6 +19,7 @@ class UserCore extends Authenticatable
     'password',
     'profile_id',
     'company_id',
+    'person_id',
   ];
 
   protected $hidden = [

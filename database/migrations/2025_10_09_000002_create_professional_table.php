@@ -8,32 +8,22 @@ use Core\Support\MigrationAuditables;
 return new class extends Migration {
   public function up(): void
   {
-    Schema::create('account_receivable', function (Blueprint $table) {
+    Schema::create('professional', function (Blueprint $table) {
       $table->id();
       $table->unsignedBigInteger('person_id');
-
-      $table->string('ds_title');
-      $table->integer('nr_installment');
-
-      $table->decimal('vl_total', 15, 2);
-      $table->decimal('vl_balance', 15, 2);
-
-      $table->date('da_due');
-      $table->date('da_received')->nullable();
-
-      $table->enum('tp_status', ['pending', 'paid']);
-      $table->text('ds_observations');
+      $table->unsignedBigInteger('user_id')->nullable();
+      $table->decimal('pc_commission', 5, 2)->default(0);
+      $table->date('da_hire')->nullable();
+      $table->date('da_termination')->nullable();
 
       $table->foreign('person_id')->references('id')->on('person')->onUpdate('cascade')->onDelete('restrict');
-      $table->unique(['ds_title', 'nr_installment']);
-
+      $table->foreign('user_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('restrict');
       MigrationAuditables::init($table)->inject();
     });
   }
 
   public function down(): void
   {
-    Schema::dropIfExists('account_receivable');
+    Schema::dropIfExists('professional');
   }
 };
-

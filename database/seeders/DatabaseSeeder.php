@@ -10,6 +10,7 @@ use Core\Models\Resource;
 use Core\Models\Profile;
 use Core\Models\Company;
 use App\Models\User;
+use Core\Models\Person;
 
 class DatabaseSeeder extends Seeder
 {
@@ -97,12 +98,19 @@ class DatabaseSeeder extends Seeder
 
   private function makeUserMecanicaGestor($obHighLevelProfile, $obCompanyMecanica)
   {
+    $obPersonMecanica = Person::create([
+      'name' => 'Pessoa Mecânica',
+      'company_id' => $obCompanyMecanica->id,
+      ...$this->getAuditables()
+    ]);
+
     User::create([
       'name' => 'Usuário Mecânica Teste',
       'email' => 'mecanica@admin.com',
       'password' => bcrypt('123456'),
       'profile_id' => $obHighLevelProfile->id,
       'company_id' => $obCompanyMecanica->id,
+      'person_id' => $obPersonMecanica->id,
     ]);
   }
 

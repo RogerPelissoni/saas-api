@@ -14,6 +14,14 @@ return new class extends Migration {
       $table->foreign('created_by')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
       $table->foreign('updated_by')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
     });
+
+    Schema::table('person', function (Blueprint $table) {
+      $table->unsignedBigInteger('created_by')->references('id')->on('users');
+      $table->unsignedBigInteger('updated_by')->references('id')->on('users');
+
+      $table->foreign('created_by')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
+      $table->foreign('updated_by')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
+    });
   }
 
   public function down(): void
