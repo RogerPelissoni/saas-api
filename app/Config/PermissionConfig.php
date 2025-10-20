@@ -8,10 +8,10 @@ class PermissionConfig extends PermissionConfigCore
 {
   protected static function default(): array
   {
-    $permissionLevelRead = PermissionLevelEnum::READ->value;
+    // $permissionLevelRead = PermissionLevelEnum::READ->value;
 
     return [
-      'event' => ['permission_level' => $permissionLevelRead]
+      // 'event' => ['permission_level' => $permissionLevelRead]
     ];
   }
 }
