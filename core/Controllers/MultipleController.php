@@ -43,10 +43,10 @@ class MultipleController
         $arrReturn[$dsSignature] = $arrReturn[$dsSignature]['data']['data'] ?? $arrReturn[$dsSignature]['data'] ?? $arrReturn[$dsSignature];
 
       } catch (\Throwable $e) {
-        info("Erro ao processar {$dsSignature}: " . $e->getMessage());
+        info("Erro ao processar $dsSignature: " . $e->getMessage());
 
         $arrReturn[$dsSignature] = [
-          'error' => 'Falha ao carregar dados deste recurso'
+          'error' => "Falha ao carregar dados do recurso $dsSignature"
         ];
       }
     }

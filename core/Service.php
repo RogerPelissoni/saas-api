@@ -21,20 +21,67 @@ abstract class Service
   {
     return ResponseHelper::success(data: $this->model::findOrFail($id));
   }
+
   public function keyValue(Request $request)
   {
+    $obModel = new $this->model;
+    $mainTable = $obModel->getTable();
+
     $kvKey = $this->model::$kvKey ?? 'id';
     $kvValues = $this->model::$kvValues ?? ['name'];
 
-    if (count($kvValues) > 1) {
-      $kvSeparator = ' - ';
-      $concatColumns = implode(", '{$kvSeparator}', ", $kvValues);
+    $queryModelBase = $this->model::query();
 
-      $kvData = $this->model::selectRaw("{$kvKey}, CONCAT($concatColumns) as value")
-        ->pluck('value', $kvKey)
+    $arrJoins = [];
+    $arrSelects = ["{$mainTable}.{$kvKey}"];
+    $relationsToLoad = [];
+    $useWith = false;
+
+    foreach ($kvValues as $nmValueField) {
+      if (str_contains($nmValueField, '.')) {
+        [$nmRelation, $nmRelationColumn] = explode('.', $nmValueField, 2);
+
+        $obRelation = $obModel->{$nmRelation}();
+
+        if ($obRelation instanceof \Illuminate\Database\Eloquent\Relations\BelongsTo) {
+          $obRelated = $obRelation->getRelated();
+          $relatedTable = $obRelated->getTable();
+          $foreignKey = $obRelation->getQualifiedForeignKeyName(); // ex: client.person_id
+          $ownerKey = $obRelation->getQualifiedOwnerKeyName(); // ex: person.id
+
+          if (!in_array($relatedTable, $arrJoins)) {
+            $queryModelBase->leftJoin($relatedTable, $foreignKey, '=', $ownerKey);
+            $arrJoins[] = $relatedTable;
+          }
+
+          $arrSelects[] = "$relatedTable.$nmRelationColumn";
+        } else {
+          $useWith = true;
+          $relationsToLoad[] = $nmRelation;
+        }
+      } else {
+        $arrSelects[] = "{$mainTable}.{$nmValueField}";
+      }
+    }
+
+    if (!$useWith) {
+      $kvSeparator = ' - ';
+      $concatColumns = collect($arrSelects)
+        ->reject(fn($s) => $s === "{$mainTable}.{$kvKey}")
+        ->map(fn($s) => str_contains($s, ' as ') ? explode(' as ', $s)[0] : $s)
+        ->implode(", '{$kvSeparator}', ");
+
+      $kvData = $queryModelBase
+        ->selectRaw("{$mainTable}.{$kvKey}, CONCAT($concatColumns) as value")
+        ->pluck('value', "{$mainTable}.{$kvKey}")
         ->toArray();
     } else {
-      $kvData = $this->model::pluck($kvValues[0], $kvKey)->toArray();
+      $data = $this->model::with(array_unique($relationsToLoad))->get();
+
+      $kvData = $data->mapWithKeys(function ($item) use ($kvValues, $kvKey) {
+        $values = collect($kvValues)->map(fn($f) => data_get($item, $f))->filter()->join(' - ');
+        return [$item->{$kvKey} => $values];
+      })->toArray();
     }
 
     return ResponseHelper::success(data: $kvData);
