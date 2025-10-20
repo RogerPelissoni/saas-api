@@ -18,9 +18,12 @@ class EventService extends Service
 
     $obModel = $modelClass::create($request->only($fillableFields));
 
+    // Aqui vai inserir no ServiceOrder que insere automático no AccountReceivable
+    info($request->all());
+
     app(AccountReceivableService::class)->storePending(
       $obModel->client->person_id,
-      $obModel->vl_price,
+      $request->vl_total,
       $request->da_due
     );
 
