@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Core\Model;
 
 class Event extends Model
@@ -18,4 +19,20 @@ class Event extends Model
     'dt_end',
     'tp_status',
   ];
+
+  // Relations
+  public function client(): BelongsTo
+  {
+    return $this->belongsTo(Client::class);
+  }
+
+  public function professional(): BelongsTo
+  {
+    return $this->belongsTo(Professional::class);
+  }
+
+  public function accountReceivable(): BelongsTo
+  {
+    return $this->belongsTo(AccountReceivable::class);
+  }
 }
