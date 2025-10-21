@@ -14,7 +14,7 @@ abstract class Service
   public function index(Request $request): JsonResponse
   {
     $obModel = $this->model::query();
-    return QueryHelper::resolve($obModel, $request);
+    return QueryHelper::resolve($this->model, $obModel, $request);
   }
 
   public function show(string $id): JsonResponse

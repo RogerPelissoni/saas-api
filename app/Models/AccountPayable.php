@@ -14,7 +14,7 @@ class AccountPayable extends Model
     'vl_total',
     'vl_balance',
     'da_due',
-    'da_received',
+    'da_settlement',
     'tp_status',
     'ds_observations',
   ];

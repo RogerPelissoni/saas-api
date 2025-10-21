@@ -27,10 +27,48 @@ class UserCore extends Authenticatable
     'remember_token',
   ];
 
+  protected $appends = [
+    'ds_person',
+    'ds_profile',
+    'ds_company',
+  ];
+
+  public static array $bindFilters = [
+    'ds_person' => ['relation' => 'person', 'field' => 'name'],
+    'ds_profile' => ['relation' => 'profile', 'field' => 'name'],
+    'ds_company' => ['relation' => 'company', 'field' => 'name'],
+  ];
+
   // Relations
+  public function person(): BelongsTo
+  {
+    return $this->belongsTo(Person::class);
+  }
+
   public function profile(): BelongsTo
   {
     return $this->belongsTo(Profile::class);
+  }
+
+  public function company(): BelongsTo
+  {
+    return $this->belongsTo(Company::class);
+  }
+
+  // Attributes
+  public function getDsPersonAttribute()
+  {
+    return $this->person?->name;
+  }
+
+  public function getDsProfileAttribute()
+  {
+    return $this->profile?->name;
+  }
+
+  public function getDsCompanyAttribute()
+  {
+    return $this->company?->name;
   }
 
   // Aux

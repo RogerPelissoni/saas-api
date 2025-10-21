@@ -5,10 +5,10 @@ use Core\Helpers\ResponseHelper;
 
 class QueryHelper
 {
-  public static function resolve($obModel, $request)
+  public static function resolve($modelClass, $obModel, $request)
   {
-    QueryHelper::injectFilters($obModel, $request->filters);
-    QueryHelper::injectSort($obModel, $request->sort);
+    QueryHelper::injectFilters($modelClass, $obModel, $request->filters);
+    QueryHelper::injectSort($modelClass, $obModel, $request->sort);
 
     $data = empty($request->perPage)
       ? $obModel->get()
@@ -17,9 +17,10 @@ class QueryHelper
     return ResponseHelper::success(data: $data);
   }
 
-  public static function injectFilters(&$obModel, $requestFilters): void
+  public static function injectFilters($modelClass, &$obModel, $requestFilters): void
   {
     $arrFilters = json_decode($requestFilters, true);
+    $arrBindFilters = $modelClass::$bindFilters ?? [];
 
     foreach ($arrFilters ?? [] as $paramsFilter) {
       $matchMode = $paramsFilter['matchMode'];
@@ -29,19 +30,51 @@ class QueryHelper
         $vlFilter = "%$vlFilter%";
       }
 
-      $obModel->where($paramsFilter['field'], $matchMode, $vlFilter);
+      if (isset($arrBindFilters[$paramsFilter['field']])) {
+        $bindParams = $arrBindFilters[$paramsFilter['field']];
+        $bindRelation = $bindParams['relation'];
+        $bindField = $bindParams['field'];
+
+        $obModel->withWhereHas($bindRelation, function ($q) use ($bindField, $matchMode, $vlFilter) {
+          $q->where($bindField, $matchMode, $vlFilter);
+        });
+      } else {
+        $obModel->where($paramsFilter['field'], $matchMode, $vlFilter);
+      }
     }
   }
 
-  public static function injectSort(&$obModel, $requestSort): void
+  public static function injectSort($modelClass, &$obModel, $requestSort): void
   {
     $paramsSort = json_decode($requestSort, true);
-
     if (!isset($paramsSort['direction'])) {
       return;
     }
 
+    $arrBindFilters = $modelClass::$bindFilters ?? [];
+    $mainTable = $obModel->getModel()->getTable();
+
     $orderColumn = $paramsSort['columnFilter'] ?? $paramsSort['columnBase'];
-    $obModel->orderBy($orderColumn, $paramsSort['direction']);
+    $direction = strtolower($paramsSort['direction']) === 'desc' ? 'desc' : 'asc';
+
+    if (isset($arrBindFilters[$orderColumn])) {
+      $relation = $arrBindFilters[$orderColumn]['relation'] ?? null;
+      $field = $arrBindFilters[$orderColumn]['field'] ?? $orderColumn;
+
+      if ($relation && method_exists($obModel->getModel(), $relation)) {
+        $relationModel = $obModel->getModel()->$relation()->getRelated();
+        $foreignKey = $obModel->getModel()->$relation()->getQualifiedForeignKeyName();
+        $ownerKey = $obModel->getModel()->$relation()->getQualifiedOwnerKeyName();
+
+        $obModel->orderBy(
+          $relationModel::select($field)->whereColumn($ownerKey, $foreignKey),
+          $direction
+        );
+
+        return;
+      }
+    }
+
+    $obModel->orderBy("$mainTable.$orderColumn", $direction);
   }
 }

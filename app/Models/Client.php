@@ -17,9 +17,19 @@ class Client extends Model
     'da_registration',
   ];
 
+  protected $appends = [
+    'name',
+  ];
+
   // Relations
   public function person(): BelongsTo
   {
     return $this->belongsTo(Person::class);
+  }
+
+  // Appends
+  public function getNameAttribute()
+  {
+    return $this->person->name;
   }
 }

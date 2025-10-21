@@ -19,7 +19,7 @@ class AccountReceivableService extends Service
       'vl_total' => $vlTotal,
       'vl_balance' => $vlTotal,
       'da_due' => $daDue ?? now(),
-      'da_received' => null,
+      'da_settlement' => null,
       'tp_status' => AccountGeneralStatusEnum::PENDING->value,
       'ds_observations' => null,
     ]);

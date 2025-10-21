@@ -20,7 +20,7 @@ return new class extends Migration {
       $table->decimal('vl_balance', 15, 2);
 
       $table->date('da_due');
-      $table->date('da_received')->nullable();
+      $table->date('da_settlement')->nullable();
 
       $table->enum('tp_status', AccountGeneralStatusEnum::getValues());
       $table->text('ds_observations')->nullable();
