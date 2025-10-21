@@ -1,6 +1,7 @@
 <?php
 namespace App\Services;
 
+use App\DTOs\StoreServiceOrderDTO;
 use Illuminate\Http\JsonResponse;
 use Core\Helpers\ResponseHelper;
 use Illuminate\Http\Request;
@@ -18,14 +19,13 @@ class EventService extends Service
 
     $obModel = $modelClass::create($request->only($fillableFields));
 
-    // Aqui vai inserir no ServiceOrder que insere automático no AccountReceivable
-    info($request->all());
-
-    app(AccountReceivableService::class)->storePending(
-      $obModel->client->person_id,
-      $request->vl_total,
-      $request->da_due
-    );
+    app(ServiceOrderService::class)->storeWithFinancial(new StoreServiceOrderDTO(
+      idEvent: $obModel->id,
+      idClient: $request->client_id,
+      idProfessional: $request->professional_id,
+      vlTotal: $request->vl_total,
+      daDue: $request->da_due,
+    ));
 
     return ResponseHelper::success(data: $obModel);
   }
