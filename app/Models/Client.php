@@ -18,7 +18,11 @@ class Client extends Model
   ];
 
   protected $appends = [
-    'name',
+    'ds_person',
+  ];
+
+  public static array $bindFilters = [
+    'ds_person' => ['relation' => 'person', 'field' => 'name'],
   ];
 
   // Relations
@@ -28,8 +32,8 @@ class Client extends Model
   }
 
   // Appends
-  public function getNameAttribute()
+  public function getDsPersonAttribute()
   {
-    return $this->person->name;
+    return $this->person?->name;
   }
 }
