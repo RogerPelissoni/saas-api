@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Core\Models\Person;
+use App\Models\Relations\PersonRelation;
 use Core\Model;
 
 class AccountReceivable extends Model
 {
+  use PersonRelation;
+
   protected $table = 'account_receivable';
   protected $fillable = [
     'person_id',
@@ -21,26 +22,16 @@ class AccountReceivable extends Model
     'ds_observations',
   ];
 
-  protected $appends = [
-    'ds_person',
-  ];
-
-  public static array $bindFilters = [
-    'ds_person' => [
-      'relation' => 'person',
-      'field' => 'name',
-    ]
-  ];
-
-  // Relations
-  public function person(): BelongsTo
+  public function __construct(array $attributes = [])
   {
-    return $this->belongsTo(Person::class);
+    parent::__construct($attributes);
+    $this->appends = array_merge($this->appends, PersonRelation::appends());
   }
 
-  // Attributes
-  public function getDsPersonAttribute()
+  public static function getBindFilters(): array
   {
-    return $this->person?->name;
+    return [
+      ...PersonRelation::bindFilters(),
+    ];
   }
 }

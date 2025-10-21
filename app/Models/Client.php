@@ -21,9 +21,12 @@ class Client extends Model
     'ds_person',
   ];
 
-  public static array $bindFilters = [
-    'ds_person' => ['relation' => 'person', 'field' => 'name'],
-  ];
+  public static function getBindFilters(): array
+  {
+    return [
+      'ds_person' => ['relation' => 'person', 'field' => 'name'],
+    ];
+  }
 
   // Relations
   public function person(): BelongsTo

@@ -11,8 +11,6 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model
   public static string $kvKey = 'id';
   public static array $kvValues = ['name'];
 
-  public static array $bindFilters = [];
-
   protected static array $tableCache = [];
   protected array $autoFillables = [
     'company_id',
@@ -68,5 +66,10 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model
     }
 
     return in_array($column, self::$tableCache[$table], true);
+  }
+
+  public static function getBindFilters(): array
+  {
+    return [];
   }
 }

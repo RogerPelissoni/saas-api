@@ -33,11 +33,14 @@ class UserCore extends Authenticatable
     'ds_company',
   ];
 
-  public static array $bindFilters = [
-    'ds_person' => ['relation' => 'person', 'field' => 'name'],
-    'ds_profile' => ['relation' => 'profile', 'field' => 'name'],
-    'ds_company' => ['relation' => 'company', 'field' => 'name'],
-  ];
+  public static function getBindFilters(): array
+  {
+    return [
+      'ds_person' => ['relation' => 'person', 'field' => 'name'],
+      'ds_profile' => ['relation' => 'profile', 'field' => 'name'],
+      'ds_company' => ['relation' => 'company', 'field' => 'name'],
+    ];
+  }
 
   // Relations
   public function person(): BelongsTo

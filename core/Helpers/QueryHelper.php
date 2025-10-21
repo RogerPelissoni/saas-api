@@ -20,7 +20,7 @@ class QueryHelper
   public static function injectFilters($modelClass, &$obModel, $requestFilters): void
   {
     $arrFilters = json_decode($requestFilters, true);
-    $arrBindFilters = $modelClass::$bindFilters ?? [];
+    $arrBindFilters = $modelClass::getBindFilters() ?? [];
 
     foreach ($arrFilters ?? [] as $paramsFilter) {
       $matchMode = $paramsFilter['matchMode'];
@@ -51,7 +51,7 @@ class QueryHelper
       return;
     }
 
-    $arrBindFilters = $modelClass::$bindFilters ?? [];
+    $arrBindFilters = $modelClass::getBindFilters() ?? [];
     $mainTable = $obModel->getModel()->getTable();
 
     $orderColumn = $paramsSort['columnFilter'] ?? $paramsSort['columnBase'];
