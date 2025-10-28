@@ -1,0 +1,35 @@
+LICENÇA DE USO RESTRITO – PROGRAMA DE COMPUTADOR
+
+Copyright (c) 2025 Roger Seidler Pelissoni
+Todos os direitos reservados.
+
+Este software, incluindo seu código-fonte, estrutura, lógica, design e documentação, é propriedade exclusiva de Roger Seidler Pelissoni, protegido pelas Leis nº 9.609/98 e nº 9.610/98 do Brasil, bem como por tratados internacionais de propriedade intelectual.
+
+É EXPRESSAMENTE PROIBIDO:
+
+1. Copiar, reproduzir, modificar, adaptar, traduzir, publicar, transmitir, distribuir, sublicenciar, vender, alugar ou explorar comercialmente este software ou qualquer parte dele sem autorização prévia e por escrito do autor.
+
+2. Utilizar este software para fins comerciais, acadêmicos, educacionais ou pessoais sem permissão formal.
+
+3. Remover, ocultar ou alterar qualquer aviso de copyright, marca registrada ou outros avisos legais contidos no código ou na documentação.
+
+4. Compartilhar acesso ao repositório, credenciais ou qualquer parte do código com terceiros sem autorização.
+
+5. Incorporar este software em outros sistemas, produtos ou serviços, públicos ou privados, sem consentimento do autor.
+
+LIMITAÇÃO DE RESPONSABILIDADE:
+
+Este software é fornecido "no estado em que se encontra", sem garantias de qualquer tipo, expressas ou implícitas, incluindo, mas não se limitando a, garantias de comercialização, adequação a um propósito específico ou não violação.
+
+O autor não será responsável por quaisquer danos diretos, indiretos, incidentais, especiais ou consequenciais decorrentes do uso ou da impossibilidade de uso deste software.
+
+VIOLAÇÃO E PENALIDADES:
+
+O uso não autorizado deste software constitui violação dos direitos autorais e poderá resultar em sanções civis e criminais, conforme previsto na legislação vigente.
+
+CONTATO PARA AUTORIZAÇÃO:
+
+Para obter permissão de uso, entre em contato com:
+Roger Seidler Pelissoni – rogerpelissoni@hotmail.com
+
+VERSÃO: 1.0 – Outubro de 2025
