@@ -9,6 +9,7 @@ class ResourceConfig extends ResourceConfigCore
   {
     return [
       ['name' => 'Clientes', 'signature' => 'client'],
+      ['name' => 'Movimentações de Conta', 'signature' => 'accountmovement'],
       ['name' => 'Contas a Pagar', 'signature' => 'accountpayable'],
       ['name' => 'Contas a Receber', 'signature' => 'accountreceivable'],
       ['name' => 'Eventos de Calendário', 'signature' => 'event'],

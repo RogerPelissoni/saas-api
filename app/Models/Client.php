@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Core\Models\Person;
+use App\Models\Relations\PersonRelation;
 use Core\Model;
 
 class Client extends Model
 {
+  use PersonRelation;
+
   public static string $kvKey = 'id';
   public static array $kvValues = ['person.name'];
 
@@ -17,26 +18,16 @@ class Client extends Model
     'da_registration',
   ];
 
-  protected $appends = [
-    'ds_person',
-  ];
+  public function __construct(array $attributes = [])
+  {
+    parent::__construct($attributes);
+    $this->appends = array_merge($this->appends, PersonRelation::appends());
+  }
 
   public static function getBindFilters(): array
   {
     return [
-      'ds_person' => ['relation' => 'person', 'field' => 'name'],
+      ...PersonRelation::bindFilters(),
     ];
-  }
-
-  // Relations
-  public function person(): BelongsTo
-  {
-    return $this->belongsTo(Person::class);
-  }
-
-  // Appends
-  public function getDsPersonAttribute()
-  {
-    return $this->person?->name;
   }
 }

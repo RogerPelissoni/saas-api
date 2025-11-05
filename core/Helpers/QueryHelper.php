@@ -33,10 +33,14 @@ class QueryHelper
       if (isset($arrBindFilters[$paramsFilter['field']])) {
         $bindParams = $arrBindFilters[$paramsFilter['field']];
         $bindRelation = $bindParams['relation'];
-        $bindField = $bindParams['field'];
+        $arrBindFields = is_array($bindParams['field']) ? $bindParams['field'] : [$bindParams['field']];
 
-        $obModel->withWhereHas($bindRelation, function ($q) use ($bindField, $matchMode, $vlFilter) {
-          $q->where($bindField, $matchMode, $vlFilter);
+        $obModel->withWhereHas($bindRelation, function ($q) use ($arrBindFields, $matchMode, $vlFilter) {
+          $q->where(function ($subQuery) use ($arrBindFields, $matchMode, $vlFilter) {
+            foreach ($arrBindFields as $bindField) {
+              $subQuery->orWhere($bindField, $matchMode, $vlFilter);
+            }
+          });
         });
       } else {
         $obModel->where($paramsFilter['field'], $matchMode, $vlFilter);

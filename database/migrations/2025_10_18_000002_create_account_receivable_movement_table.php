@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
+use Core\Enums\AccountGeneralMovementEnum;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use Core\Support\MigrationAuditables;
@@ -14,6 +15,7 @@ return new class extends Migration {
       $table->decimal('vl_movement', 15, 2);
       $table->decimal('vl_discount', 15, 2);
       $table->date('da_movement');
+      $table->enum('tp_movement', AccountGeneralMovementEnum::getValues());
       $table->enum('tp_payment', ['money', 'pix']);
       $table->text('ds_observations');
 
