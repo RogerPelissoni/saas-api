@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Support\Facades\DB;
 use Core\Helpers\QueryHelper;
 use Core\Model;
 
@@ -33,12 +34,14 @@ class AccountMovement extends Model
     $obAccountReceivable = AccountReceivable::select([
       ...collect($arrCommonFields)->map(fn($field) => "account_receivable.$field as $field"),
       ...$arrPersonFields,
+      DB::raw("'receivable' as tp_movement"),
     ])
       ->leftJoin('person', 'person.id', '=', 'account_receivable.person_id');
 
     $obAccountPayable = AccountPayable::select([
       ...collect($arrCommonFields)->map(fn($field) => "account_payable.$field as $field"),
       ...$arrPersonFields,
+      DB::raw("'payable' as tp_movement"),
     ])
       ->leftJoin('person', 'person.id', '=', 'account_payable.person_id');
 

@@ -6,6 +6,7 @@ Route::middleware(['auth:sanctum', \Core\Middleware\RouteAccessMiddleware::class
   // Get
   Route::get('accountmovement', [\App\Http\Controllers\AccountMovementController::class, 'index']);
   // Post
+  Route::post('accountmovement', [\App\Http\Controllers\AccountMovementController::class, 'store']);
   // Resources
   Route::apiResource('accountpayable', \App\Http\Controllers\AccountPayableController::class);
   Route::apiResource('accountreceivable', \App\Http\Controllers\AccountReceivableController::class);

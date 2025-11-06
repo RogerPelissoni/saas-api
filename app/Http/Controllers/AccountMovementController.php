@@ -12,4 +12,15 @@ class AccountMovementController
   {
     return ResponseHelper::success(data: AccountMovement::allMovements($request));
   }
+
+  public function store(Request $request)
+  {
+    $daBaixa = $request->daBaixa;
+
+    foreach ($request->accountMovements ?? [] as $sAccountMovement) {
+      info($sAccountMovement);
+    }
+
+    return ResponseHelper::success();
+  }
 }
