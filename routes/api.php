@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth:sanctum', \Core\Middleware\RouteAccessMiddleware::class])->group(function () {
   // Get
+  Route::get('accountmovement', [\App\Http\Controllers\AccountMovementController::class, 'index']);
   // Post
   // Resources
   Route::apiResource('accountpayable', \App\Http\Controllers\AccountPayableController::class);

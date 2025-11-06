@@ -10,6 +10,8 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model
 {
   public static string $kvKey = 'id';
   public static array $kvValues = ['name'];
+  
+  public static bool $withoutTableOrderBy = false;
 
   protected static array $tableCache = [];
   protected array $autoFillables = [

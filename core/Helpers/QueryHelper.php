@@ -79,6 +79,10 @@ class QueryHelper
       }
     }
 
-    $obModel->orderBy("$mainTable.$orderColumn", $direction);
+    $orderColumn = ($modelClass::$withoutTableOrderBy ?? false)
+      ? $orderColumn
+      : "$mainTable.$orderColumn";
+
+    $obModel->orderBy($orderColumn, $direction);
   }
 }
