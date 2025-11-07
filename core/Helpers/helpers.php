@@ -24,3 +24,12 @@ if (!function_exists('sql_dump')) {
     info($sqlFormatted);
   }
 }
+
+if (!function_exists('throw_if')) {
+  function throw_if(bool $condition, string $message, string $exceptionClass = \Exception::class): void
+  {
+    if ($condition) {
+      throw new $exceptionClass($message);
+    }
+  }
+}
