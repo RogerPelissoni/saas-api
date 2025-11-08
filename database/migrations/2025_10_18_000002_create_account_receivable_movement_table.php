@@ -5,6 +5,7 @@ use Core\Enums\AccountGeneralMovementEnum;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use Core\Support\MigrationAuditables;
+use Core\Enums\PaymentEnum;
 
 return new class extends Migration {
   public function up(): void
@@ -16,7 +17,7 @@ return new class extends Migration {
       $table->decimal('vl_discount', 15, 2);
       $table->date('da_movement');
       $table->enum('tp_movement', AccountGeneralMovementEnum::getValues());
-      $table->enum('tp_payment', ['money', 'pix']);
+      $table->enum('tp_payment', PaymentEnum::getValues());
       $table->text('ds_observations')->nullable();
 
       $table->foreign('account_receivable_id')->references('id')->on('account_receivable')->onUpdate('cascade')->onDelete('restrict');

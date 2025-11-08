@@ -21,10 +21,12 @@ class AccountMovementController
   public function store(Request $request)
   {
     $arrAccountMovements = $request->accountMovements ?? [];
-    $daBaixa = $request->daBaixa;
+    $daMovement = $request->daMovement;
+    $tpPayment = $request->tpPayment;
 
     throw_if(empty($arrAccountMovements), "Selecione ao menos um Título para prosseguir");
-    throw_if(!$daBaixa, "Selecione a Data de Baixa para prosseguir");
+    throw_if(!$daMovement, "Selecione a Data de Baixa para prosseguir");
+    throw_if(!$tpPayment, "Selecione a Forma de Pagamento para prosseguir");
 
     foreach ($arrAccountMovements as $sAccountMovement) {
       $tpMovement = $sAccountMovement['tp_movement'];
@@ -42,8 +44,8 @@ class AccountMovementController
         $accountForeignField => $obAccount->id,
         'vl_movement' => $vlPaid,
         'vl_discount' => 0,
-        'da_movement' => $daBaixa,
-        'tp_payment' => 'money',
+        'da_movement' => $daMovement,
+        'tp_payment' => $tpPayment,
         'ds_observations' => null,
       ]);
 
