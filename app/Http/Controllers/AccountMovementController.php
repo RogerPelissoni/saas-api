@@ -15,7 +15,12 @@ class AccountMovementController
 {
   public function index(Request $request)
   {
-    return ResponseHelper::success(data: AccountMovement::allMovements($request));
+    return ResponseHelper::success(data: AccountMovement::allAccounts($request));
+  }
+
+  public function indexMovementsByAccount(Request $request)
+  {
+    return ResponseHelper::success(data: AccountMovement::getMovementsByAccount($request));
   }
 
   public function store(Request $request)

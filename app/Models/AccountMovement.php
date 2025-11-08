@@ -11,7 +11,7 @@ class AccountMovement extends Model
   protected $table = null;
   public static bool $withoutTableOrderBy = true;
 
-  public static function allMovements($request)
+  public static function allAccounts($request)
   {
     $arrCommonFields = [
       'id',
@@ -65,5 +65,17 @@ class AccountMovement extends Model
     return empty($request->perPage)
       ? $obAccountReceivable->get()
       : $obAccountReceivable->paginate($request->perPage);
+  }
+
+  public static function getMovementsByAccount($request)
+  {
+    $idAccount = $request->id_account;
+    $tpMovement = $request->tp_movement;
+
+    if ($tpMovement === 'receivable') {
+      return AccountReceivableMovement::where('account_receivable_id', $idAccount)->get();
+    } else if ($tpMovement === 'payable') {
+      return AccountPayableMovement::where('account_receivable_id', $idAccount)->get();
+    }
   }
 }
