@@ -13,6 +13,8 @@ class AccountPayableMovement extends Model
     'vl_discount',
     'da_movement',
     'tp_payment',
+    'tp_movement',
+    'fl_blocked',
     'ds_observations',
   ];
 }

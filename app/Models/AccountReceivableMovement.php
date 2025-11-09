@@ -12,7 +12,9 @@ class AccountReceivableMovement extends Model
     'vl_movement',
     'vl_discount',
     'da_movement',
+    'tp_movement',
     'tp_payment',
+    'fl_blocked',
     'ds_observations',
   ];
 }

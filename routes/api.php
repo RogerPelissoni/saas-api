@@ -8,6 +8,7 @@ Route::middleware(['auth:sanctum', \Core\Middleware\RouteAccessMiddleware::class
   Route::get('accountmovement/movementsByAccount', [\App\Http\Controllers\AccountMovementController::class, 'indexMovementsByAccount']);
   // Post
   Route::post('accountmovement', [\App\Http\Controllers\AccountMovementController::class, 'store']);
+  Route::post('accountmovement/paymenyReversal', [\App\Http\Controllers\AccountMovementController::class, 'storePaymentReversal']);
   // Resources
   Route::apiResource('accountpayable', \App\Http\Controllers\AccountPayableController::class);
   Route::apiResource('accountreceivable', \App\Http\Controllers\AccountReceivableController::class);

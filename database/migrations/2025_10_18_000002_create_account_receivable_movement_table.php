@@ -18,6 +18,7 @@ return new class extends Migration {
       $table->date('da_movement');
       $table->enum('tp_movement', AccountGeneralMovementEnum::getValues());
       $table->enum('tp_payment', PaymentEnum::getValues());
+      $table->boolean('fl_blocked')->nullable();
       $table->text('ds_observations')->nullable();
 
       $table->foreign('account_receivable_id')->references('id')->on('account_receivable')->onUpdate('cascade')->onDelete('restrict');

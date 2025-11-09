@@ -70,11 +70,11 @@ class AccountMovement extends Model
   public static function getMovementsByAccount($request)
   {
     $idAccount = $request->id_account;
-    $tpMovement = $request->tp_movement;
+    $tpAccount = $request->tp_account;
 
-    if ($tpMovement === 'receivable') {
+    if ($tpAccount === 'receivable') {
       return AccountReceivableMovement::where('account_receivable_id', $idAccount)->get();
-    } else if ($tpMovement === 'payable') {
+    } else if ($tpAccount === 'payable') {
       return AccountPayableMovement::where('account_receivable_id', $idAccount)->get();
     }
   }

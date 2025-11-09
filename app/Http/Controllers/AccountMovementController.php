@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Core\Enums\AccountGeneralMovementEnum;
 use App\Models\AccountReceivableMovement;
 use Core\Enums\AccountGeneralStatusEnum;
 use App\Models\AccountPayableMovement;
@@ -50,6 +51,7 @@ class AccountMovementController
         'vl_movement' => $vlPaid,
         'vl_discount' => 0,
         'da_movement' => $daMovement,
+        'tp_movement' => AccountGeneralMovementEnum::NORMAL->value,
         'tp_payment' => $tpPayment,
         'ds_observations' => null,
       ]);
@@ -60,10 +62,49 @@ class AccountMovementController
 
       if ($obAccount->vl_balance <= 0) {
         $obAccount->tp_status = AccountGeneralStatusEnum::PAID->value;
+        $obAccount->da_settlement = now();
       }
 
       $obAccount->save();
     }
+
+    return ResponseHelper::success();
+  }
+
+  public function storePaymentReversal(Request $request)
+  {
+    $idAccount = $request->account_id;
+    $idAccountMovement = $request->account_movement_id;
+    $tpAccount = $request->tp_account;
+
+    $accountClass = $tpAccount === 'receivable' ? AccountReceivable::class : AccountPayable::class;
+    $accountForeignField = $tpAccount === 'receivable' ? 'account_receivable_id' : 'account_payable_id';
+    $accountMovementClass = $tpAccount === 'receivable' ? AccountReceivableMovement::class : AccountPayableMovement::class;
+
+    $obAccount = $accountClass::findOrFail($idAccount);
+    $obAccountMovement = $accountMovementClass::findOrFail($idAccountMovement);
+
+    throw_if($obAccountMovement->tp_movement === AccountGeneralMovementEnum::REVERSE->value, 'Movimentações de Estorno não podem ser estornadas');
+    throw_if($obAccountMovement->fl_blocked, 'A movimentação selecionada já possui Estorno');
+
+    $accountMovementClass::create([
+      $accountForeignField => $obAccount->id,
+      'vl_movement' => $obAccountMovement->vl_movement,
+      'vl_discount' => $obAccountMovement->vl_discount,
+      'da_movement' => now(),
+      'tp_movement' => AccountGeneralMovementEnum::REVERSE->value,
+      'tp_payment' => $obAccountMovement->tp_payment,
+      'fl_blocked' => true,
+      'ds_observations' => $obAccountMovement->ds_observations,
+    ]);
+
+    $obAccount->update([
+      'vl_balance' => $obAccount->vl_balance + $obAccountMovement->vl_movement,
+    ]);
+
+    $obAccountMovement->update([
+      'fl_blocked' => true,
+    ]);
 
     return ResponseHelper::success();
   }
