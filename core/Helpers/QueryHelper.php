@@ -26,6 +26,10 @@ class QueryHelper
       $matchMode = $paramsFilter['matchMode'];
       $vlFilter = $paramsFilter['value'];
 
+      if (empty($vlFilter)) {
+        continue;
+      }
+
       if ($matchMode === 'like') {
         $vlFilter = "%$vlFilter%";
       }
@@ -38,12 +42,12 @@ class QueryHelper
         $obModel->withWhereHas($bindRelation, function ($q) use ($arrBindFields, $matchMode, $vlFilter) {
           $q->where(function ($subQuery) use ($arrBindFields, $matchMode, $vlFilter) {
             foreach ($arrBindFields as $bindField) {
-              $subQuery->orWhere($bindField, $matchMode, $vlFilter);
+              self::injectWhere($subQuery, $bindField, $matchMode, $vlFilter, true);
             }
           });
         });
       } else {
-        $obModel->where($paramsFilter['field'], $matchMode, $vlFilter);
+        self::injectWhere($obModel, $paramsFilter['field'], $matchMode, $vlFilter);
       }
     }
   }
@@ -84,5 +88,17 @@ class QueryHelper
       : "$mainTable.$orderColumn";
 
     $obModel->orderBy($orderColumn, $direction);
+  }
+
+  private static function injectWhere($model, $field, $matchMode, $value, $orClause = false): void
+  {
+    if ($matchMode === 'in') {
+      $method = $orClause ? 'orWhereIn' : 'whereIn';
+      $model->$method($field, explode(',', $value));
+      return;
+    }
+
+    $method = $orClause ? 'orWhere' : 'where';
+    $model->$method($field, $matchMode, $value);
   }
 }

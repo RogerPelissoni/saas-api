@@ -13,6 +13,9 @@ class ResourceConfig extends ResourceConfigCore
       ['name' => 'Contas a Pagar', 'signature' => 'accountpayable'],
       ['name' => 'Contas a Receber', 'signature' => 'accountreceivable'],
       ['name' => 'Eventos de Calendário', 'signature' => 'event'],
+      ['name' => 'Pedidos', 'signature' => 'order'],
+      ['name' => 'Produtos', 'signature' => 'product'],
+      ['name' => 'Produtos - Categorias', 'signature' => 'productcategory'],
       ['name' => 'Profissionais', 'signature' => 'professional'],
     ];
   }
