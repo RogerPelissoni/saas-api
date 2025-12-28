@@ -17,4 +17,5 @@ Route::middleware(['auth:sanctum', \Core\Middleware\RouteAccessMiddleware::class
   Route::apiResource('product', \App\Http\Controllers\ProductController::class);
   Route::apiResource('productcategory', \App\Http\Controllers\ProductCategoryController::class);
   Route::apiResource('professional', \App\Http\Controllers\ProfessionalController::class);
+  Route::apiResource('stock', \App\Http\Controllers\StockController::class);
 });

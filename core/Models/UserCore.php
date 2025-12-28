@@ -6,6 +6,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Core\DTO\BindFilterDTO;
 
 class UserCore extends Authenticatable
 {
@@ -36,9 +37,9 @@ class UserCore extends Authenticatable
   public static function getBindFilters(): array
   {
     return [
-      'ds_person' => ['relation' => 'person', 'field' => 'name'],
-      'ds_profile' => ['relation' => 'profile', 'field' => 'name'],
-      'ds_company' => ['relation' => 'company', 'field' => 'name'],
+      'ds_person' => new BindFilterDTO(relation: 'person', field: 'name'),
+      'ds_profile' => new BindFilterDTO(relation: 'profile', field: 'name'),
+      'ds_company' => new BindFilterDTO(relation: 'company', field: 'name'),
     ];
   }
 

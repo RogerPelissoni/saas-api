@@ -36,8 +36,8 @@ class QueryHelper
 
       if (isset($arrBindFilters[$paramsFilter['field']])) {
         $bindParams = $arrBindFilters[$paramsFilter['field']];
-        $bindRelation = $bindParams['relation'];
-        $arrBindFields = is_array($bindParams['field']) ? $bindParams['field'] : [$bindParams['field']];
+        $bindRelation = $bindParams->relation;
+        $arrBindFields = is_array($bindParams->field) ? $bindParams->field : [$bindParams->field];
 
         $obModel->withWhereHas($bindRelation, function ($q) use ($arrBindFields, $matchMode, $vlFilter) {
           $q->where(function ($subQuery) use ($arrBindFields, $matchMode, $vlFilter) {
@@ -66,8 +66,8 @@ class QueryHelper
     $direction = strtolower($paramsSort['direction']) === 'desc' ? 'desc' : 'asc';
 
     if (isset($arrBindFilters[$orderColumn])) {
-      $relation = $arrBindFilters[$orderColumn]['relation'] ?? null;
-      $field = $arrBindFilters[$orderColumn]['field'] ?? $orderColumn;
+      $relation = $arrBindFilters[$orderColumn]->relation;
+      $field = $arrBindFilters[$orderColumn]->field ?? $orderColumn;
 
       if ($relation && method_exists($obModel->getModel(), $relation)) {
         $relationModel = $obModel->getModel()->$relation()->getRelated();

@@ -4,13 +4,14 @@ namespace Core;
 
 use Illuminate\Support\Facades\Schema;
 use Core\Scopes\CompanyScope;
+use Core\DTO\BindFilterDTO;
 use App\Models\User;
 
 abstract class Model extends \Illuminate\Database\Eloquent\Model
 {
   public static string $kvKey = 'id';
   public static array $kvValues = ['name'];
-  
+
   public static bool $withoutTableOrderBy = false;
 
   protected static array $tableCache = [];
@@ -64,12 +65,15 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model
     $table = (new static)->getTable();
 
     if (!isset(self::$tableCache[$table])) {
-      self::$tableCache[$table] = \Illuminate\Support\Facades\Schema::getColumnListing($table);
+      self::$tableCache[$table] = Schema::getColumnListing($table);
     }
 
     return in_array($column, self::$tableCache[$table], true);
   }
 
+  /**
+   * @return array<string, BindFilterDTO>
+   */
   public static function getBindFilters(): array
   {
     return [];
