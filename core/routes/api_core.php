@@ -23,3 +23,8 @@ Route::middleware(['auth:sanctum', \Core\Middleware\RouteAccessMiddleware::class
   Route::apiResource('profile', \Core\Controllers\ProfileController::class);
   Route::apiResource('user', \Core\Controllers\UserController::class);
 });
+
+Route::get('/health', function () {
+  sleep(5);
+  return "I'm ALIVE!";
+});
