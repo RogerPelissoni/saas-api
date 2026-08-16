@@ -3,9 +3,12 @@
 namespace Core\Models;
 
 use Core\Model;
+use Illuminate\Notifications\Notifiable;
 
 class Person extends Model
 {
+  use Notifiable;
+
   protected $table = 'person';
   protected $fillable = [
     'name',
@@ -23,4 +26,11 @@ class Person extends Model
     'ds_address_zipcode',
     'fl_active',
   ];
+
+  // A coluna de e-mail é ds_email, não email, então precisamos dizer
+  // explicitamente ao canal "mail" das Notifications pra onde enviar.
+  public function routeNotificationForMail(): ?string
+  {
+    return $this->ds_email;
+  }
 }
