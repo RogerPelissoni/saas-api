@@ -3,6 +3,7 @@
 namespace Core\Controllers;
 
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
 use Core\Models\ProfilePermission;
 use Illuminate\Http\Request;
 use Core\Controller;
@@ -18,13 +19,15 @@ class AuthController extends Controller
       'password' => 'required|min:6',
     ]);
 
-    $user = User::create([
-      'name' => $data['name'],
-      'email' => $data['email'],
-      'password' => Hash::make($data['password']),
-    ]);
+    [$user, $token] = DB::transaction(function () use ($data) {
+      $user = User::create([
+        'name' => $data['name'],
+        'email' => $data['email'],
+        'password' => Hash::make($data['password']),
+      ]);
 
-    $token = $user->createToken('api-token')->plainTextToken;
+      return [$user, $user->createToken('api-token')->plainTextToken];
+    });
 
     return response()->json([
       'user' => $user,

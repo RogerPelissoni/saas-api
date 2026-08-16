@@ -1,6 +1,7 @@
 <?php
 namespace App\Services;
 
+use Illuminate\Support\Facades\DB;
 use App\DTOs\StoreServiceOrderDTO;
 use App\Models\ServiceOrder;
 use App\Models\Client;
@@ -12,21 +13,21 @@ class ServiceOrderService extends Service
 
   public function storeWithFinancial(StoreServiceOrderDTO $dto): ServiceOrder
   {
-    $obClient = Client::find($dto->idClient);
+    return DB::transaction(function () use ($dto) {
+      $obClient = Client::find($dto->idClient);
 
-    $obAccountReceivable = app(AccountReceivableService::class)->storePending(
-      $obClient->person_id,
-      $dto->vlTotal,
-      $dto->daDue,
-    );
+      $obAccountReceivable = app(AccountReceivableService::class)->storePending(
+        $obClient->person_id,
+        $dto->vlTotal,
+        $dto->daDue,
+      );
 
-    $obModel = $this->model::create([
-      'client_id' => $dto->idClient,
-      'professional_id' => $dto->idProfessional,
-      'account_receivable_id' => $obAccountReceivable->id,
-      'event_id' => $dto->idEvent,
-    ]);
-
-    return $obModel;
+      return $this->model::create([
+        'client_id' => $dto->idClient,
+        'professional_id' => $dto->idProfessional,
+        'account_receivable_id' => $obAccountReceivable->id,
+        'event_id' => $dto->idEvent,
+      ]);
+    });
   }
 }

@@ -14,7 +14,6 @@ return Application::configure(basePath: dirname(__DIR__))
   )
   ->withMiddleware(function (Middleware $middleware): void {
     $middleware->api(prepend: [
-      \Core\Middleware\TransactionMiddleware::class,
       \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
     ]);
   })

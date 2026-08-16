@@ -35,4 +35,17 @@ return [
         ],
     ],
 
+    'rabbitmq' => [
+        'host' => env('RABBITMQ_HOST', 'rabbitmq'),
+        'port' => env('RABBITMQ_PORT', 5672),
+        'user' => env('RABBITMQ_USER', 'guest'),
+        'password' => env('RABBITMQ_PASSWORD', 'guest'),
+        // Timeout alto porque consumers ficam de pé esperando mensagens que
+        // podem não chegar por minutos. Ver docs/rabbitmq-exemplo-basico.md.
+        'read_write_timeout' => env('RABBITMQ_READ_WRITE_TIMEOUT', 3600),
+        'exchanges' => [
+            'account_movements' => env('RABBITMQ_EXCHANGE_ACCOUNT_MOVEMENTS', 'account_movements'),
+        ],
+    ],
+
 ];

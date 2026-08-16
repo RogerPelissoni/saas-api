@@ -1,6 +1,7 @@
 <?php
 namespace App\Services;
 
+use Illuminate\Support\Facades\DB;
 use App\DTOs\StoreServiceOrderDTO;
 use Illuminate\Http\JsonResponse;
 use Core\Helpers\ResponseHelper;
@@ -20,17 +21,21 @@ class EventService extends Service
     $modelClass = $this->model;
     $fillableFields = (new $modelClass())->getFillable();
 
-    $obModel = $modelClass::create($request->only($fillableFields));
+    $obModel = DB::transaction(function () use ($modelClass, $fillableFields, $request, $flServiceOrder) {
+      $obModel = $modelClass::create($request->only($fillableFields));
 
-    if ($flServiceOrder) {
-      app(ServiceOrderService::class)->storeWithFinancial(new StoreServiceOrderDTO(
-        idEvent: $obModel->id,
-        idClient: $request->client_id,
-        idProfessional: $request->professional_id,
-        vlTotal: $request->vl_total,
-        daDue: $request->da_due,
-      ));
-    }
+      if ($flServiceOrder) {
+        app(ServiceOrderService::class)->storeWithFinancial(new StoreServiceOrderDTO(
+          idEvent: $obModel->id,
+          idClient: $request->client_id,
+          idProfessional: $request->professional_id,
+          vlTotal: $request->vl_total,
+          daDue: $request->da_due,
+        ));
+      }
+
+      return $obModel;
+    });
 
     return ResponseHelper::success(data: $obModel);
   }

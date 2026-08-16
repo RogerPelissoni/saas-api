@@ -1,6 +1,7 @@
 <?php
 namespace Core\Services;
 
+use Illuminate\Support\Facades\DB;
 use Core\Models\ProfilePermission;
 use Illuminate\Http\JsonResponse;
 use Core\Helpers\ResponseHelper;
@@ -38,9 +39,13 @@ class ProfileService extends Service
     $modelClass = $this->model;
     $fillableFields = (new $modelClass())->getFillable();
 
-    $obModel = $modelClass::create($request->only($fillableFields));
+    $obModel = DB::transaction(function () use ($modelClass, $fillableFields, $request) {
+      $obModel = $modelClass::create($request->only($fillableFields));
 
-    $this->syncPermissions($obModel->id, $request->permissions);
+      $this->syncPermissions($obModel->id, $request->permissions);
+
+      return $obModel;
+    });
 
     return ResponseHelper::success(data: $obModel);
   }
@@ -50,10 +55,14 @@ class ProfileService extends Service
     $modelClass = $this->model;
     $idProfile = $id;
 
-    $obModel = $modelClass::findOrFail($idProfile);
-    $obModel->update($request->only($obModel->getFillable()));
+    $obModel = DB::transaction(function () use ($modelClass, $idProfile, $request) {
+      $obModel = $modelClass::findOrFail($idProfile);
+      $obModel->update($request->only($obModel->getFillable()));
 
-    $this->syncPermissions($idProfile, $request->permissions);
+      $this->syncPermissions($idProfile, $request->permissions);
+
+      return $obModel;
+    });
 
     return ResponseHelper::success(data: $obModel);
   }
